@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -27,24 +28,25 @@ struct size {
     int maxN;
 };
 
-session enter(){
+session enter() {
     session temp;
-    cout << "Напишите название кинотеатра"<<endl;
+    cout << "��������" << endl;
     temp.cinema = "Star";
-    cout << "Напишите дату фильма"<<endl;
+    cout << "Напишите дату фильма" << endl;
     temp.nowaDays.data = 10;
     temp.nowaDays.month = "october";
     temp.nowaDays.year = 2022;
-    cout<<"Напишите время начала фильма"<<endl;
+    cout << "Напишите времѝ начала фильма" << endl;
     temp.beginTime.hour = 10;
     temp.beginTime.minutes = 40;
-    cout<<"Напишите стоимость билета"<<endl;
+    cout << "Напишите ѝтоимоѝть билета" << endl;
     temp.coast = 200;
     return temp;
 };
 
 int main() {
+    system("chcp 1251");
     setlocale(LC_ALL, "Russian");
-    session first=enter();
-    cout<<first.cinema<<" "<<first.nowaDays.data<<" "<<first.nowaDays.month<<" "<<first.nowaDays.year<<" "<<first.beginTime.hour << ":" << first.beginTime.minutes<<" "<<first.coast<<endl;
+    session first = enter();
+    cout << first.cinema << " " << first.nowaDays.data << " " << first.nowaDays.month << " " << first.nowaDays.year << " " << first.beginTime.hour << ":" << first.beginTime.minutes << " " << first.coast << endl;
 };
