@@ -1,5 +1,6 @@
-switch(chose)
+ // switch (chose)
     // {
-    //     case 1:
+    // case 1:
+    //     b[3] = enter();
 
     // }
