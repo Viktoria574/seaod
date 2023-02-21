@@ -1,2 +1,2 @@
-case 3:
-    //     cup = enterNew({});
+cout<<t.massive.size();
+        // print(t.massive, t.n);
