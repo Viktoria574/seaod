@@ -73,19 +73,21 @@ void print(vector<session> b, int n) {
 }
 
 int add(vector <session> b, int n, session temp) {
-    int m = n;
-    for (int i = 0; i < n; i++) {
+    int i=0;
+    while(i<n){
         if (b[i].cinema == temp.cinema) {
-            b.insert(b.begin() + i, temp);
-            n = n + 1;
+            b.insert(b.begin()+i, temp);
+            i=n+1;
+        }
+        else{
+            i+=1;
         }
     }
-    if (m == n) {
+    if (i == n) {
         b.push_back(temp);
-        n += 1;
     }
     cout << "Измененная таблица:" << endl;
-    print(b, n);
+    print(b, n+1);
     return n;
 }
 
@@ -121,9 +123,9 @@ int main() {
     tablu t;
     t.n = 3;
     t.N = 100;
-    t.massive.push_back({ "Синема парк", "Хатико", {10, "октября", 2023}, {10, 40}, 350 });
-    t.massive.push_back({ "Киносити", "Джокер", {15, "сентября", 2023}, {15, 30}, 200 });
-    t.massive.push_back({ "Синема парк", "Пинокио", {15, "сентября", 2023}, {9, 20}, 400 });
+    t.massive.push_back({ "Киносити", "Хатико", {10, "октября", 2023}, {10, 40}, 350 });
+    t.massive.push_back({ "СинемаПарк", "Джокер", {15, "сентября", 2023}, {15, 30}, 200 });
+    t.massive.push_back({ "СинемаСтар", "Пинокио", {15, "сентября", 2023}, {9, 20}, 400 });
     t.massive.reserve(t.N);
     switch (oppening({}))//Для выбора дальнейших действий
     {
@@ -136,7 +138,6 @@ int main() {
         break;
     case 3:
         t.n = delite(t.massive, t.n, enterNew({}));
-        // cout<<t.massive.size();
         print(t.massive, t.n);
         break;
     case 4:
