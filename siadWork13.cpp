@@ -5,18 +5,18 @@
 
 using namespace std;
 
-struct time {
+struct time {//Структура для времени
     int hour;
     int minutes;
 };
 
-struct day {
+struct day {//Структура для даты
     int data;
     string month;
     int year;
 };
 
-struct session {
+struct session {//Структура для записи
     string cinema;
     string film;
     day nowaDays;
@@ -30,7 +30,7 @@ struct tablu {//Структура для таблицы
     vector <session> massive;
 };
 
-int oppening(int chose) {
+int oppening(int chose) {//Функция для выбора операции
     cout << "Выберите одну из заданных опраций:" << endl;
     cout << "1) Заполнить запись по сеансу" << endl;
     cout << "2) Вставиить запись по сеансу в таблицу" << endl;
@@ -40,7 +40,7 @@ int oppening(int chose) {
     return chose;
 }
 
-session enter(session temp)//Р¤СѓРЅРєС†РёСЏ РІРІРѕРґР° СЃС‚СЂРѕРєРё
+session enter(session temp)//Функция для ввода записи
 {
     cout << "Ведите название кинотеатра, названия фильма, дату,время начала фильма, стоимость билета" << endl;
     cin >> temp.cinema >> temp.film >> temp.nowaDays.data >> temp.nowaDays.month;
@@ -48,31 +48,31 @@ session enter(session temp)//Р¤СѓРЅРєС†РёСЏ РІРІРѕРґР° СЃС‚СЂРѕРєРё
     return temp;
 };
 
-day enterNew(day temp) {
+day enterNew(day temp) {//Функция для ввода даты
     cout << "Введите дату:" << endl;
     cin >> temp.data >> temp.month >> temp.year;
     return temp;
 }
 
-string enterFi(string tes) {
+string enterFi(string tes) {//Функция для ввода названия фильма
     cout << "Введите название фильма:" << endl;
     cin >> tes;
     return tes;
 }
 
-void printRow(session temp) {
+void printRow(session temp) {//Процедура для вывода одной записи
     cout << temp.cinema << " " << temp.film << " " << temp.nowaDays.data << " ";
     cout << temp.nowaDays.month << " " << temp.nowaDays.year << " ";
     cout << temp.beginTime.hour << ":" << temp.beginTime.minutes << " " << temp.coast << endl;
 };
 
-void print(vector<session> b, int n) {
+void print(vector<session> b, int n) {//Процедура для вывода таблицы
     for (int i = 0; i < n; i++) {
         printRow(b[i]);
     }
 }
 
-int add(vector <session> b, int n, session temp) {
+int add(vector <session> b, int n, session temp) {//Функция для добавления записи в таблицу
     int i=0;
     while(i<n){
         if (b[i].cinema == temp.cinema) {
@@ -91,12 +91,12 @@ int add(vector <session> b, int n, session temp) {
     return n;
 }
 
-int delite(vector<session> b, int n, day temp) {
+int delite(vector<session> b, int n, day temp) {//Функция для удаления записи
     int m = 0;
     int i=0;
     while(i<n-m){
         if (b[i].nowaDays.data == temp.data and b[i].nowaDays.month == temp.month and b[i].nowaDays.year == temp.year) {
-            b.erase(b.begin() + i);
+            b.erase(b.begin()+i);
             m += 1;
         }
         else{
@@ -104,10 +104,11 @@ int delite(vector<session> b, int n, day temp) {
         }
     }
     cout << "Измененная таблица:" << endl;
+    print(b, n-m);
     return n - m;
 }
 
-void need(string tes, vector<session> b, int n) {
+void need(string tes, vector<session> b, int n) {//Процедура поиска и вывода нужной записи по фильму
     cout << "Найденые кинотеатры:" << endl;
     for (int i = 0; i < n; i++) {
         if (b[i].film == tes) {
@@ -138,7 +139,6 @@ int main() {
         break;
     case 3:
         t.n = delite(t.massive, t.n, enterNew({}));
-        print(t.massive, t.n);
         break;
     case 4:
         need(enterFi({}), t.massive, t.n);
