@@ -7,12 +7,12 @@ struct MyNode{
     MyNode *next;//указатель на следущий элемент
 };
 
-void setList(MyNode *L, int n){
+void setList(MyNode* &L, int n){
     MyNode *temp, *el=NULL;
     for (int i=0; i<n; i++){
+        temp= new MyNode;
         temp->data=1 + (rand() % 9);
         temp->next=NULL;
-        el=temp;
         if(i==0){
             L=temp;
         }
@@ -23,9 +23,16 @@ void setList(MyNode *L, int n){
     }
 }
 
-
+void getList(MyNode* &L){
+    MyNode *temp=L;
+    while(temp!=NULL){
+        cout<<temp->data<<" ";
+        temp=temp->next;
+    }
+}
 
 int main(){
-    MyNode *L;
-    setList(L, 10);
+    MyNode *myList=NULL;
+    setList(myList, 10);
+    getList(myList);
 };
