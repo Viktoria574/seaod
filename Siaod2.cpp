@@ -1,38 +1,81 @@
 #include <iostream>
+#include<cstdlib>
+#include<ctime>
 
 using namespace std;
 
-struct MyNode{
+struct MyNode {
     int data;
-    MyNode *next;//—É–∫–∞–∑–∞—Ç–µ–ª—å –Ω–∞ —Å–ª–µ–¥—É—â–∏–π —ç–ª–µ–º–µ–Ω—Ç
+    MyNode* next;//—É–∫–∞–∑–∞—Ç–µ–ª—å –Ω–∞ —Å–ª–µ–¥—É—â–∏–π —ç–ª–µ–º–µ–Ω—Ç
 };
 
-void setList(MyNode* &L, int n){
-    MyNode *temp, *el=NULL;
-    for (int i=0; i<n; i++){
-        temp= new MyNode;
-        temp->data=1 + (rand() % 9);
-        temp->next=NULL;
-        if(i==0){
-            L=temp;
+void setList(MyNode*& L, int n) {
+    MyNode* temp, * el = NULL;
+    for (int i = 0; i < n; i++) {
+        temp = new MyNode;
+        temp->data = 1 + (rand() % 9);
+        temp->next = NULL;
+        if (i == 0) {
+            L = temp;
         }
-        else{
-            el->next=temp;
+        else {
+            el->next = temp;
         }
-        el=temp;
+        el = temp;
     }
 }
 
-void getList(MyNode* &L){
-    MyNode *temp=L;
-    while(temp!=NULL){
-        cout<<temp->data<<" ";
-        temp=temp->next;
+void getList(MyNode*& L) {
+    MyNode* temp = L;
+    while (temp != NULL) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+int searchMax(MyNode*& L) {
+    MyNode* temp = L;
+    int maxi = temp->data;
+    while (temp != NULL) {
+        if (maxi < temp->data) {
+            maxi = temp->data;
+        }
+        temp = temp->next;
+    }
+    return maxi;
+}
+
+void deleteNodes(MyNode*& L, int value) {
+    MyNode* temp = L, * nextNode = temp->next;
+    while (nextNode != NULL) {
+        if (temp->data == value) {
+            delete temp;
+            temp = nextNode;
+            nextNode = nextNode->next;
+            L = temp;
+        }
+        if (nextNode->data == value) {
+            temp->next = nextNode->next;
+            delete nextNode;
+        }
+        temp = temp->next;
+        nextNode = temp->next;
     }
 }
 
-int main(){
-    MyNode *myList=NULL;
-    setList(myList, 10);
+int main() {
+    system("chcp 1251");
+    setlocale(LC_ALL, "Russian");
+    srand((unsigned) time(NULL));
+    int n, maxValue;
+    cout << "¬‚Â‰ËÚÂ ÍÓÎË˜ÂÒÚ‚Ó ÛÁÎÓ‚ ÒÔËÒÍ‡: " << endl;
+    cin >> n;
+    MyNode* myList = NULL;
+    setList(myList, n);
+    getList(myList);
+    maxValue = searchMax(myList);
+    cout << "Ã‡ÍÒËÏ‡Î¸ÌÓÂ ÁÌ‡˜ÂÌËÂ ÒÔËÒÍ‡: " << maxValue << endl;
+    deleteNodes(myList, maxValue);
     getList(myList);
 };
