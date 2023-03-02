@@ -92,7 +92,6 @@ int add(session b[], int n, session temp) {//Функция для добавления записи в таб
         n += 1;
     }
     cout << "Измененная таблица:" << endl;
-    print(b, n);
     return n;
 }
 
@@ -107,7 +106,7 @@ int delite(session b[], int n, day temp) {//Функция для удаления записи
             i = 0;
         }
     }
-    cout << "Измененная таблица:" << endl;
+    // cout << "Измененная таблица:" << endl;
     print(b, n - m);
     return n - m;
 }
@@ -134,15 +133,16 @@ int main() {
     switch (oppening({}))//Для выбора дальнейших действий
     {
     case 1:
-        enter({});
-        cout<<"Запись успешно заполнена!";
-        break;
+        t.n = add(t.massive, t.n, enter({}));
+        cout<<"Запись успешно заполнена!"<<endl;
+        // break;
     case 2:
         t.n = add(t.massive, t.n, enter({}));
-        break;
+        print(t.massive, t.n);
+        // break;
     case 3:
         t.n = delite(t.massive, t.n, enterNew({}));
-        break;
+        // break;
     case 4:
         need(enterFi({}), t.massive, t.n);
         break;
