@@ -25,6 +25,7 @@ class MyClass{
             cout<<"Value of a hidden property "<<closeValue<<endl;
         }
         
+        
     private:
         int closeValue;
 
