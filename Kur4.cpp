@@ -49,7 +49,7 @@ class cl_base{
         bool ReBuild(cl_base* newSt);
         
         //КВ4
-        string CreatPath(cl_base* path);
+        string CreatPath();
         void set_connect(TYPE_SIGNAL p_signal, cl_base *p_object, TYPE_HANDLER p_ob_hendler);
         void delete_connect(TYPE_SIGNAL p_signal, cl_base *p_object, TYPE_HANDLER p_ob_hendler);
         void emit_signal ( TYPE_SIGNAL p_signal, string & s_command );
@@ -60,16 +60,17 @@ class cl_base{
 //КВ4
 
 void cl_base:: signal_f(string &usd){
-    cout<<"Hello cl_base";
+    cout<<endl<<"Signal from "<<this->CreatPath();
 };
 
 void cl_base:: hendler_f(string str){
     cout<<"Bye cl_base";
 }
 
-string cl_base:: CreatPath(cl_base* path){//создание абсолютного пути
+string cl_base:: CreatPath(){//создание абсолютного пути
     string answer="";
-    while(path!=this){
+    cl_base *path=this;
+    while(path!=getRoot()){
         answer=path->getName()+'/'+answer;
         path=path->getHead();
     }
@@ -180,21 +181,23 @@ cl_1::cl_1(cl_base* p_head, string s_name):cl_base(p_head, s_name){};
 cl_2::cl_2(cl_base* p_head, string s_name):cl_base(p_head, s_name){};
 
 void cl_2:: signal_f(string &usd){
-    cout<<"Hello2";
+    usd+=" (class: 2)";
+    cl_base::signal_f(usd);
 };
 
 void cl_2:: hendler_f(string str){
-    cout<<"Bye2";
+    cout<<endl<<"Signal to "<<this->CreatPath()<<" Text:"<<str;
 }
 
 cl_3::cl_3(cl_base* p_head, string s_name):cl_base(p_head, s_name){};
 
 void cl_3:: signal_f(string &usd){
-    cout<<"Hello3";
+    usd+=" (class: 3)";
+    cl_base::signal_f(usd);
 }
 
 void cl_3:: hendler_f(string str){
-    cout<<"Bye3";
+    cout<<endl<<"Signal to "<<this->CreatPath()<<" Text:"<<str;
 }
 
 cl_4::cl_4(cl_base* p_head, string s_name):cl_base(p_head, s_name){};
@@ -488,10 +491,7 @@ void cl_application:: off_tree_objects(){
         }
         else{
             if (comanda=="SET_CONNECT"){
-
                 ob_head->set_connect(SIGNAL_D( signal_f ), ob_sub, HENDLER_D( hendler_f ));
-                //ob_head->set_connect(SIGNAL_D( signal_f ), ob_sub, HENDLER_D( hendler_f ));
-                //cout<<endl<<"WORk";
             }
             else if (comanda=="EMIT"){
                  ob_head->emit_signal ( SIGNAL_D( signal_f ), obOut);
