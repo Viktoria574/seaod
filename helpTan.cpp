@@ -8,7 +8,7 @@ int main(){
     int N, maxi=-100000, mini=100000, indexMin1, indexMin2, indexMax1, indexMax2, number, sumi=0, index;
     cout<<"Введите количество элементов в массиве:"<<endl;
     cin>>N;
-    int massive[N];
+    int *massive = new int[N];
     for (int i=0; i<N; i++){
         cout<<"Введите "<<i+1<<" элемент:"<<endl;
         cin>>number;

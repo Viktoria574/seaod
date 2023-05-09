@@ -4,8 +4,6 @@
 
 using namespace std;
 
-
-
 float Fact(int i){
     if (i>0){
         return i*Fact(i-1);
@@ -32,7 +30,6 @@ float FunCos(float x, float e){
         result+=item;
         n+=1;
         item=TelorItemCos(x, n);
-        cout<<result<<"  "<<item<<endl;
     }
     return result+item;
 }
@@ -49,5 +46,5 @@ int main(){
     if (ost!=0){
         x=x-trunc(ost)*2*M_PI;
     }
-    cout<<"cos(x)="<<FunCos(x, e)<<" "<<cos(x)<<" "<<cos(12);
+    cout<<"cos(x)="<<FunCos(x, e);
 }
