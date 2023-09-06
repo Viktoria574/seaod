@@ -16,7 +16,7 @@ class cl_base{
     int countNames(string n);
     cl_base* searchByName(string n);
     cl_base* getRoot();
-    int ready=0;
+    int ready=1;//!!!!
     void kill();
 
     public:
@@ -42,7 +42,7 @@ class cl_base{
         cl_base* getSubOb(string sName);
         cl_base* searchCurrent(string n);
         //void printOb(string str);
-        void setReady(int offing, string ob_name);
+        void setReady(int offing);
         int getReady();
         cl_base* TransletPath(string str);
         bool Delete(string str);
@@ -68,8 +68,8 @@ void cl_base:: hendler_f(string str){
 }
 
 string cl_base:: CreatPath(){//создание абсолютного пути
-    string answer="";
-    cl_base *path=this;
+    cl_base *path=this->getHead();
+    string answer=getName();
     while(path!=getRoot()){
         answer=path->getName()+'/'+answer;
         path=path->getHead();
@@ -106,7 +106,7 @@ void cl_base :: emit_signal ( TYPE_SIGNAL p_signal, string & s_command )
     TYPE_HANDLER   p_handler;
     cl_base      * p_object;
 
-    //if (this->ready!=0){
+    if (this->ready!=0){
         ( this ->* p_signal ) ( s_command );  // вызов метода сигнала
     
     for ( unsigned int i = 0; i < connects.size ( ); i ++ ) // цикл по всем обработчикам
@@ -119,20 +119,20 @@ void cl_base :: emit_signal ( TYPE_SIGNAL p_signal, string & s_command )
                 ( p_object ->* p_handler ) ( s_command );      // вызов метода обработчика
             }
         }
-    //}
-    //else
-        //return;
+    }
+    else
+        return;
 }
 
 //Конец
 
 class cl_application: public cl_base
 {
-    void off_tree_objects();
     public:
     cl_application(cl_base* p_head_object);
     void build_tree_objects();
-    int exec_app();
+    int off_tree_objects();
+    //int exec_app();
     //void ending();
 };
 
@@ -162,18 +162,24 @@ class cl_4: public cl_base
 {
     public:
         cl_4(cl_base *p_head, string s_name);
+        void signal_f(string &usd);
+        void hendler_f(string);
 };
 
 class cl_5: public cl_base
 {
     public:
         cl_5(cl_base *p_head, string s_name);
+        void signal_f(string &usd);
+        void hendler_f(string);
 };
 
 class cl_6: public cl_base
 {
     public:
         cl_6(cl_base *p_head, string s_name);
+        void signal_f(string &usd);
+        void hendler_f(string);
 };
 
 cl_1::cl_1(cl_base* p_head, string s_name):cl_base(p_head, s_name){};
@@ -186,7 +192,7 @@ void cl_2:: signal_f(string &usd){
 };
 
 void cl_2:: hendler_f(string str){
-    cout<<endl<<"Signal to "<<this->CreatPath()<<" Text:"<<str;
+    cout<<endl<<"Signal to "<<this->CreatPath()<<"   Text: "<<str;
 }
 
 cl_3::cl_3(cl_base* p_head, string s_name):cl_base(p_head, s_name){};
@@ -202,9 +208,36 @@ void cl_3:: hendler_f(string str){
 
 cl_4::cl_4(cl_base* p_head, string s_name):cl_base(p_head, s_name){};
 
+void cl_4:: signal_f(string &usd){
+    usd+=" (class: 4)";
+    cl_base::signal_f(usd);
+}
+
+void cl_4:: hendler_f(string str){
+    cout<<endl<<"Signal to "<<this->CreatPath()<<" Text:"<<str;
+}
+
 cl_5::cl_5(cl_base* p_head, string s_name):cl_base(p_head, s_name){};
 
+void cl_5:: signal_f(string &usd){
+    usd+=" (class: 5)";
+    cl_base::signal_f(usd);
+}
+
+void cl_5:: hendler_f(string str){
+    cout<<endl<<"Signal to "<<this->CreatPath()<<" Text:"<<str;
+}
+
 cl_6::cl_6(cl_base* p_head, string s_name):cl_base(p_head, s_name){};
+
+void cl_6:: signal_f(string &usd){
+    usd+=" (class: 6)";
+    cl_base::signal_f(usd);
+}
+
+void cl_6:: hendler_f(string str){
+    cout<<endl<<"Signal to "<<this->CreatPath()<<" Text:"<<str;
+}
 
 cl_base::cl_base(cl_base* p_head_object, string s_object_name)
 {
@@ -384,19 +417,11 @@ void cl_base::kill(){
     }
 }
 
-void cl_base::setReady(int offing, string ob_name){
-    cl_base* p;
-    p=getHead();
+void cl_base::setReady(int offing){
     if (offing!=0){
-        while(p!=nullptr){
-            if(!getHead()->getReady()){
-                ready=0;
-                return;
-            }
-            ob_name=p->getName();
-            p=p->getHead();
+        if(getHead()->getReady()!=0){
+            ready=offing;
         }
-        ready=offing;
     }
     else{
         kill();
@@ -425,30 +450,21 @@ void cl_application::build_tree_objects()
     cl_base* p_head=this;
     cl_base* p_sub=nullptr;
     cin>>s_head_name;
+    //this->chekName(s_head_name);
+    //p_head=new cl_1(this, s_head_name);
     this->chekName(s_head_name);
-    while(true){
-        cin>>s_head_name;
-        if (s_head_name=="endtree")
-        {
-            cout<<"Object tree"<<endl;
-            cout<<this->getName();
-            this->printObjects(" ");
-            off_tree_objects();
-            return;
-        }
+    cin>>s_head_name;
+    while(s_head_name!="endtree"){
         cin>>s_sub_name>>classId;
         p_head=TransletPath(s_head_name);
-        if(p_head==nullptr){
-            cout<<"Object tree"<<endl;
-            cout<<this->getName();
-            this->printObjects(" ");
-            cout<<endl<<"The head object "<<s_head_name<<" is not found";
-            exit(1);
-        }
-        else if (p_head->getSubOb(s_sub_name)!=nullptr){
-            cout<<s_head_name<<" Dubbing the names of subordinate objects"<<endl;
-        }
-        else{
+        // if(p_head==nullptr){
+        //     cout<<"Object tree"<<endl;
+        //     cout<<this->getName();
+        //     this->printObjects(" ");
+        //     cout<<endl<<"The head object "<<s_head_name<<" is not found";
+        //     exit(1);
+        // }
+        if(p_head->getSubOb(s_sub_name)==nullptr){
             switch(classId)
             {
             case 2:
@@ -468,17 +484,40 @@ void cl_application::build_tree_objects()
             break;
             }
         }
+        cin>>s_head_name;
+    }
+    while (true){
+        cin>>s_head_name;
+        if (s_head_name=="end_of_connections"){
+            cout<<"Object tree"<<endl;
+            cout<<this->getName();
+            this->printObjects(" ");
+            off_tree_objects();
+            return;
+        }
+        cin>>s_sub_name;
+        p_head=TransletPath(s_head_name);
+        p_sub=TransletPath(s_sub_name);
+        if (p_head==nullptr){
+            cout<<endl<<"Object "<<s_head_name<<" not found";
+        }
+        else if(p_sub==nullptr){
+            cout<<endl<<"Handler object"<<s_sub_name<<"not found";
+        }
+        else{
+            p_head->set_connect(SIGNAL_D( signal_f ), p_sub, HENDLER_D( hendler_f ));
+        }
     }
 }
 
-void cl_application:: off_tree_objects(){
+int cl_application:: off_tree_objects(){
     string comanda, obPut, obOut;
     cl_base *ob_head=this;
     cl_base *ob_sub=this;
     while(true){
         cin>>comanda;
         if (comanda=="END"){
-            return;
+            return 0;
         }
         cin>>obPut>>obOut;
         ob_head=TransletPath(obPut);
@@ -486,7 +525,7 @@ void cl_application:: off_tree_objects(){
         if (ob_head==nullptr){
             cout<<endl<<"Object "<<obPut<<" not found";
         }
-        else if(ob_sub==nullptr and comanda!="EMIT"){
+        else if(ob_sub==nullptr and comanda!="EMIT" and comanda!="SET_CONDITION"){
             cout<<endl<<"Handler object"<<obOut<<"not found";
         }
         else{
@@ -496,19 +535,25 @@ void cl_application:: off_tree_objects(){
             else if (comanda=="EMIT"){
                  ob_head->emit_signal ( SIGNAL_D( signal_f ), obOut);
             }
+            else if (comanda=="DELETE_CONNECT"){
+                ob_head->delete_connect(SIGNAL_D( signal_f ), ob_sub, HENDLER_D( hendler_f ));
+            }
+            else if (comanda=="SET_CONDITION"){
+                ob_head->setReady(stoi(obOut));
+            }
         }
     }
 }
-int cl_application::exec_app(){
-cout<<endl<<"Current object hierarchy tree"<<endl;
-cout<<this->getName();
-this->printObjects(" ");
-return 0;
-}
+// int cl_application::exec_app(){
+// cout<<endl<<"Current object hierarchy tree"<<endl;
+// cout<<this->getName();
+// this->printObjects(" ");
+// return 0;
+// }
 
 int main()
 {
     cl_application ob_cl_application(nullptr);
     ob_cl_application.build_tree_objects();
-    return ob_cl_application.exec_app();
+    return ob_cl_application.off_tree_objects();
 }
